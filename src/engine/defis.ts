@@ -18,6 +18,14 @@ import type {
  * - oublies = exigences de poids ≥ 2 non citées.
  * - citesHorsSujet = cités ∖ exigences.
  */
+
+/** Libellés français des verdicts globaux pour l'interface (section 8.6). */
+export const LIBELLES_GLOBAL: Record<VerdictGlobal, string> = {
+  'tient': 'Ton choix tient',
+  'tient-en-partie': 'Ton choix tient en partie',
+  'ne-tient-pas': 'Ton choix ne tient pas',
+}
+
 export function evaluer(defi: Defi, essence: Essence, cites: ProprieteId[]): Verdict {
   const exigenceProprietes = new Set(defi.exigences.map((e) => e.propriete))
 
