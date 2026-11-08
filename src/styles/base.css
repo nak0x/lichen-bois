@@ -1,0 +1,24 @@
+/* Stub de socle. Agent A (design-system) écrit les règles globales :
+   body sur --paper/--ink, font-body ; overscroll-behavior: none ;
+   -webkit-tap-highlight-color: transparent ; focus visible = filet --moss-ink 2px ;
+   aucune border-radius, aucune box-shadow. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 300 var(--fs-body) / 1.55 var(--font-body);
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}

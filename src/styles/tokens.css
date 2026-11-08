@@ -1,0 +1,57 @@
+:root {
+  color-scheme: light;
+
+  /* Couleurs */
+  --paper: #EBE5DF;
+  --paper-raised: #F4F0EB;
+  --plate: #FFFFFF;
+  --ink: #1B1A17;
+  --ink-2: #5E554D;
+  --ink-3: #8C8178;
+  --grid-minor: #D8CEC5;
+  --grid-major: #A9978A;
+  --plate-grid: #DCDCD8;
+  --cross: #4E4037;
+  --moss: #8A9A3B;
+  --moss-soft: #DCE2BE;
+  --moss-ink: #3E4A1E;
+  --signal: #C0432A;
+  --signal-soft: #F3D9D2;
+
+  /* Grille */
+  --cols: 6;
+  --margin: 20px;
+  --cell: calc((100vw - 2 * var(--margin)) / var(--cols));
+  --minor: calc(var(--cell) / 4);
+  --line: 1px;
+
+  /* Typographie */
+  --font-display: 'Inter Tight', system-ui, sans-serif;
+  --font-body: 'JetBrains Mono', ui-monospace, monospace;
+  --font-vertical: 'Major Mono Display', 'JetBrains Mono', monospace;
+  --fs-display: clamp(44px, 13vw, 104px);
+  --fs-h1: clamp(32px, 9vw, 56px);
+  --fs-h2: 22px;
+  --fs-body: 15px;
+  --fs-input: 16px;
+  --fs-label: 11px;
+  --fs-vertical: clamp(28px, 8vw, 44px);
+
+  /* Mouvement */
+  --t-fast: 120ms;
+  --t-cell: 28ms;
+
+  /* Safe areas iOS */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --cols: 12;
+    --margin: 32px;
+    --cell: calc((min(100vw, 1280px) - 2 * var(--margin)) / var(--cols));
+  }
+}
