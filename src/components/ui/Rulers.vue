@@ -49,7 +49,7 @@ const letters = computed(() =>
   position: absolute;
   inset: 0;
   pointer-events: none;
-  color: var(--ink-3);
+  color: var(--ruler-color, var(--ink-3));
 }
 
 .rulers__axis {
