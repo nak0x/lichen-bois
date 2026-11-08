@@ -7,7 +7,7 @@ import {
   SEUILS,
   TOLERANCE_DENSITE,
 } from './identification'
-import { essencesFixtures, criteresFixtures } from './fixtures'
+import { essences as essencesFixtures, criteres as criteresFixtures } from '@/data'
 import type { Answers, Mesures } from '@/types/content'
 
 // ─── Utilitaires ──────────────────────────────────────────────────────────────
