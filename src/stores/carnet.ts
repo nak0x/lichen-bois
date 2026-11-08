@@ -259,6 +259,27 @@ export const useCarnetStore = defineStore('carnet', () => {
     await sauvegarder()
   }
 
+  /**
+   * Retourne l'id du spécimen à utiliser pour enregistrer un défi.
+   * - Si specimenId fourni et existant : l'utilise.
+   * - Sinon : crée ou réutilise un spécimen implicite « Atlas » pour l'essence.
+   *   (section 8.6 : « un spécimen « Atlas » implicite si le choix vient de l'atlas »)
+   */
+  async function specimenOuAtlas(essenceId: EssenceId, specimenId?: string): Promise<string> {
+    if (specimenId) {
+      const existing = trouver(specimenId)
+      if (existing) return specimenId
+    }
+    // Chercher un spécimen Atlas existant pour cette essence
+    const atlasId = `atlas-${essenceId}`
+    const existing = trouver(atlasId)
+    if (existing) return atlasId
+    // Créer le spécimen Atlas implicite
+    await creerAvecId(atlasId, `Atlas — ${essenceId}`)
+    await mettreAJourIdentification(atlasId, essenceId)
+    return atlasId
+  }
+
   /** Supprime tous les spécimens démo (préfixe demo-). */
   async function effacerDemo(): Promise<void> {
     const demos = specimens.value.filter((s) => s.id.startsWith('demo-'))
@@ -292,6 +313,7 @@ export const useCarnetStore = defineStore('carnet', () => {
     exporterJSONAvecPhotos,
     importerJSON,
     toutEffacer,
+    specimenOuAtlas,
     effacerDemo,
   }
 })
