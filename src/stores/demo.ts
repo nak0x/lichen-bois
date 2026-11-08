@@ -234,6 +234,14 @@ export const useDemoStore = defineStore('demo', () => {
     actif.value = false
   }
 
+  /** Numéro d'étape affiché (1-based) pour la barre présentateur (section 8.9). */
+  const numeroEtape = computed(() => etapeIndex.value + 1)
+
+  /** Texte de l'étape courante pour la barre présentateur. */
+  const texteEtape = computed<string | null>(() =>
+    etapeCourante.value?.texte ?? null,
+  )
+
   return {
     actif,
     etapeIndex,
@@ -241,6 +249,8 @@ export const useDemoStore = defineStore('demo', () => {
     total,
     peutReculer,
     peutAvancer,
+    numeroEtape,
+    texteEtape,
     demarrer,
     suivant,
     precedent,
