@@ -1,12 +1,13 @@
-/* Stub de socle. Agent A (design-system) écrit les règles globales :
-   body sur --paper/--ink, font-body ; overscroll-behavior: none ;
-   -webkit-tap-highlight-color: transparent ; focus visible = filet --moss-ink 2px ;
-   aucune border-radius, aucune box-shadow. */
+/* Règles globales — Agent A (design-system).
+   Aplat imprimé : aucune ombre, aucun border-radius, filets 1 px.
+   Les variables proviennent de tokens.css (ne pas les recréer). */
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 html,
@@ -15,10 +16,137 @@ body {
   padding: 0;
 }
 
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
   font: 300 var(--fs-body) / 1.55 var(--font-body);
+  letter-spacing: 0.03em;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  min-height: 100dvh;
+}
+
+/* Titres : Inter Tight, capitales serrées. */
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+h1 {
+  font-weight: 800;
+  font-size: var(--fs-h1);
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+h3 {
+  font-weight: 700;
+  font-size: var(--fs-body);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: var(--line);
+  text-underline-offset: 0.15em;
+}
+
+/* Champs de saisie : 16 px minimum (sinon iOS zoome au focus). */
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: var(--fs-input);
+  color: inherit;
+  border-radius: 0;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Focus visible = filet --moss-ink 2 px. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--moss-ink);
+  outline-offset: 1px;
+}
+
+/* prefers-reduced-motion : aucune animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Classes utilitaires typographiques partagées. */
+.t-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.t-mono {
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
