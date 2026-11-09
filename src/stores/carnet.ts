@@ -32,9 +32,12 @@ export const useCarnetStore = defineStore('carnet', () => {
     charge.value = true
   }
 
-  /** Persiste l'état complet dans IndexedDB. */
+  /** Persiste l'état complet dans IndexedDB.
+   *  On stocke une copie simple (sans proxy réactif Vue) : idb-keyval s'appuie sur
+   *  structuredClone, qui lève DataCloneError sur un Proxy réactif. Les spécimens ne
+   *  contiennent que des données sérialisables (les photos sont des clés, pas des Blobs). */
   async function sauvegarder(): Promise<void> {
-    await set(CLE_CARNET, specimens.value)
+    await set(CLE_CARNET, JSON.parse(JSON.stringify(specimens.value)) as Specimen[])
   }
 
   /** Crée un nouveau spécimen vide et retourne son id. */

@@ -182,12 +182,13 @@
  *    rétroaction, verdict global en titre, révélation des usages.
  * Le défi réalisé est enregistré via specimenOuAtlas + ajouterDefi.
  */
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import type { EssenceId, ProprieteId, Verdict } from '@/types/content'
 import { defis, essences, proprietes, registre } from '@/data'
 import { evaluer, LIBELLES_GLOBAL } from '@/engine/defis'
 import { useCarnetStore } from '@/stores/carnet'
+import { useDemoStore } from '@/stores/demo'
 import Panel from '@/components/ui/Panel.vue'
 import Chip from '@/components/ui/Chip.vue'
 import CellButton from '@/components/ui/CellButton.vue'
@@ -196,6 +197,7 @@ import Stepper from '@/components/screens/defis/Stepper.vue'
 const props = defineProps<{ defiId: string }>()
 const route = useRoute()
 const carnet = useCarnetStore()
+const demo = useDemoStore()
 
 const defi = computed(() => defis.find((d) => d.id === props.defiId))
 
@@ -297,8 +299,27 @@ function recommencer(): void {
   analyseVue.value = false
 }
 
+// Injection du mode démo : l'étape démo porte le bois choisi + les propriétés citées ;
+// on affiche directement le verdict (interception registre comprise) pour que le
+// scénario se déroule tout seul à l'écran (section 8.9).
+function appliquerDemo(): boolean {
+  if (!demo.actif || !defi.value) return false
+  const inj = demo.etapeCourante?.injecte?.defi
+  if (!inj) return false
+  const e = essences.find((x) => x.id === inj.essenceId)
+  if (!e) return false
+  choisirEssence(e.id)
+  cites.value = [...inj.cites]
+  raison.value = ''
+  verdict.value = evaluer(defi.value, e, cites.value)
+  analyseVue.value = false
+  etape.value = 4
+  return true
+}
+
 // Pré-sélection via ?specimen= / ?essence=.
-onMounted(() => {
+function appliquerSelection(): void {
+  if (appliquerDemo()) return
   const specimenQ = typeof route.query.specimen === 'string' ? route.query.specimen : undefined
   const essenceQ = typeof route.query.essence === 'string' ? route.query.essence : undefined
   if (specimenQ) {
@@ -316,7 +337,19 @@ onMounted(() => {
       etape.value = 2
     }
   }
-})
+}
+
+onMounted(appliquerSelection)
+
+// La route /defis/:defiId est réutilisée entre étapes démo (ex. arc-simple deux
+// fois) : on réapplique quand l'étape démo ou la requête change.
+watch(
+  () => [route.fullPath, demo.etapeIndex, demo.actif] as const,
+  () => {
+    recommencer()
+    appliquerSelection()
+  },
+)
 </script>
 
 <style scoped>
