@@ -7,7 +7,22 @@ const CLE_CARNET = 'lichen:carnet:v1'
 const PREFIXE_PHOTO = 'lichen:photo:'
 
 function nouvelId(): string {
-  return crypto.randomUUID()
+  // crypto.randomUUID n'existe que dans un contexte sécurisé (HTTPS ou localhost).
+  // En accès mobile via l'IP du PC en HTTP, il est indisponible → repli sur un
+  // UUID v4 construit avec getRandomValues (disponible en contexte non sécurisé).
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  const bytes = new Uint8Array(16)
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    crypto.getRandomValues(bytes)
+  } else {
+    for (let i = 0; i < 16; i++) bytes[i] = Math.floor(Math.random() * 256)
+  }
+  bytes[6] = (bytes[6] & 0x0f) | 0x40 // version 4
+  bytes[8] = (bytes[8] & 0x3f) | 0x80 // variante
+  const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0'))
+  return `${hex.slice(0, 4).join('')}-${hex.slice(4, 6).join('')}-${hex.slice(6, 8).join('')}-${hex.slice(8, 10).join('')}-${hex.slice(10, 16).join('')}`
 }
 
 function nouvelleDate(): string {
