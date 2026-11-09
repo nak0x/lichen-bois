@@ -117,3 +117,12 @@ Journal des décisions prises en autonomie pendant la construction (section 3 de
 - **Revue visuelle** : mot-symbole « LICHEN » de l'accueil ramené à `--px: var(--minor)`
   (il débordait à `--cell`, seul « LI » restait visible). États vides « Spécimen introuvable »
   passés de `--signal` à `--ink-2` : le vermillon reste réservé au registre et au destructif.
+
+## Phase 3 — Revue indépendante (section 11)
+
+- Revue indépendante (agent lecture seule, section 11) : **les 15 points sont conformes**.
+  Aucune non-conformité fonctionnelle relevée.
+- **Retour de revue appliqué** : la planche Atlas (8 colonnes + règles) débordait sur mobile
+  avec le `--cell` du socle (6 colonnes). On recalcule un `--cell` local à l'Atlas pour que
+  toute la planche tienne dans la largeur, et chaque `AtlasBloc` est contenu (`overflow: hidden`,
+  résumé tronqué à 2 lignes) pour ne pas déborder sur ses voisins.

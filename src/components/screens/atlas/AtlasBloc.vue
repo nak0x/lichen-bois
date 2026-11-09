@@ -59,6 +59,9 @@ const style = computed<CSSProperties>(() => {
   background: var(--plate);
   border: var(--line) solid var(--ink);
   transition: background var(--t-fast) linear, color var(--t-fast) linear;
+  /* Chaque bloc reste contenu dans son emprise de cellules : pas de débordement
+     sur les blocs voisins de la planche. */
+  overflow: hidden;
 }
 
 .atlas-bloc:active {
@@ -101,6 +104,11 @@ const style = computed<CSSProperties>(() => {
 .atlas-bloc__resume {
   margin: 0;
   color: var(--ink-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .atlas-bloc:active .atlas-bloc__resume {

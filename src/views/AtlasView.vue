@@ -38,6 +38,14 @@ const grilleStyle: CSSProperties = {
 </script>
 
 <style scoped>
+/* La planche fait 8 colonnes + règles ; sur mobile le --cell du socle (6 col)
+   la ferait déborder. On recalcule un --cell local pour que toute la planche
+   (règles comprises) tienne dans la largeur disponible. Tout (grille, coupes,
+   blocs) se met à l'échelle ensemble puisque Plate et AtlasBloc lisent --cell. */
+.atlas {
+  --cell: calc((min(100vw, 1280px) - 2 * var(--margin)) / 9);
+}
+
 .atlas__head {
   margin-bottom: var(--minor);
 }
@@ -57,7 +65,7 @@ const grilleStyle: CSSProperties = {
   max-width: 48ch;
 }
 
-/* Permet le défilement horizontal si la planche dépasse l'écran étroit. */
+/* Garde-fou : si la planche dépasse malgré tout, on peut la faire défiler. */
 .atlas :deep(.plate) {
   overflow-x: auto;
 }
