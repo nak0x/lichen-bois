@@ -126,3 +126,14 @@ Journal des décisions prises en autonomie pendant la construction (section 3 de
   avec le `--cell` du socle (6 colonnes). On recalcule un `--cell` local à l'Atlas pour que
   toute la planche tienne dans la largeur, et chaque `AtlasBloc` est contenu (`overflow: hidden`,
   résumé tronqué à 2 lignes) pour ne pas déborder sur ses voisins.
+
+## Phase 3 — Relecture du français
+
+- Relecture de toute l'interface : **conforme**. Tutoiement partout (aucun « vous/votre/vos »),
+  guillemets « » dans les chaînes citées, points de suspension « … », ligatures « œ » (cœur,
+  nœuds) préservées depuis SPEC.md, accents sur les capitales (« DÉDUIRE »), espaces avant
+  `: ; ? !` présents. Aucune correction nécessaire : le contenu reproduit fidèlement la
+  section 7 (source de vérité) et les chaînes d'interface des agents sont correctes.
+- Choix : on conserve les espaces ordinaires (et non des espaces insécables) avant la
+  ponctuation double, cohérent avec le texte de SPEC.md et avec les assertions e2e
+  (« Proposition : Frêne commun »).
