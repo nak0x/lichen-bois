@@ -23,6 +23,8 @@ for (const r of routes) {
 
     await page.goto(r.path, { waitUntil: 'networkidle' })
     await expect(page.locator('#app')).not.toBeEmpty()
+    // Laisse les révélations (mot-symbole, GridReveal) se terminer avant la capture.
+    await page.waitForTimeout(1200)
     await page.screenshot({ path: `docs/screens/${r.nom}.png`, fullPage: true })
 
     expect(erreurs, `erreurs console sur ${r.path} :\n${erreurs.join('\n')}`).toEqual([])

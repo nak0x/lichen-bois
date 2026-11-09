@@ -135,7 +135,10 @@ async function nouveauSpecimen(): Promise<void> {
 }
 
 .accueil__wordmark {
-  --px: var(--cell);
+  /* « LICHEN » fait 23 unités de large ; --minor le fait tenir dans la largeur
+     du contenu au lieu de déborder (--cell le rendait ~6× trop large). */
+  --px: var(--minor);
+  margin-bottom: var(--minor);
 }
 
 .accueil__sous-titre {

@@ -273,7 +273,8 @@ async function onRenommer(e: Event): Promise<void> {
 }
 
 .observer__absent {
-  color: var(--signal);
+  /* État vide neutre : le vermillon est réservé au registre et au destructif. */
+  color: var(--ink-2);
 }
 
 .observer__groupe {

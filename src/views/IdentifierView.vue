@@ -280,7 +280,8 @@ async function confirmer(id: EssenceId): Promise<void> {
 }
 
 .identifier__absent {
-  color: var(--signal);
+  /* État vide neutre : le vermillon est réservé au registre et au destructif. */
+  color: var(--ink-2);
 }
 
 /* Cinq essences. */

@@ -102,3 +102,18 @@ Journal des décisions prises en autonomie pendant la construction (section 3 de
   désormais `BottomNav` quand `demo.actif` (et plus seulement sur le chemin `/demo`). Petites
   retouches hors périmètre strict (App.vue socle, AppShell d'agent A) assumées par l'orchestrateur
   au titre de l'intégration inter-périmètres.
+
+## Phase 3 — Vérification (agent principal)
+
+- **Bug de persistance du carnet (P0, trouvé par l'e2e)** : `idb-keyval.set` s'appuie sur
+  `structuredClone`, qui lève `DataCloneError` sur le Proxy réactif de Pinia. Toute écriture
+  du carnet échouait en navigateur réel (création de spécimen, démarrage de la démo).
+  Correctif dans `src/stores/carnet.ts` : on persiste une copie simple
+  (`JSON.parse(JSON.stringify(...))`) — les spécimens ne contiennent que des données
+  sérialisables (les photos sont des clés IndexedDB, pas des Blobs).
+- **Injection démo des défis** : `DefiView` applique l'injection de l'étape démo
+  (bois choisi + propriétés citées) et affiche directement le verdict / l'interception
+  registre, pour que le scénario se déroule tout seul à l'écran (section 8.9).
+- **Revue visuelle** : mot-symbole « LICHEN » de l'accueil ramené à `--px: var(--minor)`
+  (il débordait à `--cell`, seul « LI » restait visible). États vides « Spécimen introuvable »
+  passés de `--signal` à `--ink-2` : le vermillon reste réservé au registre et au destructif.
