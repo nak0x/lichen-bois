@@ -24,6 +24,7 @@
  */
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useDemoStore } from '@/stores/demo'
 import BottomNav from './BottomNav.vue'
 import VerticalLabel from './VerticalLabel.vue'
 
@@ -39,11 +40,12 @@ const props = withDefaults(
 )
 
 const route = useRoute()
+const demo = useDemoStore()
 
 const showNav = computed(() => {
   if (props.nav !== undefined) return props.nav
-  // Masquée en mode démo plein écran.
-  return !route.path.startsWith('/demo')
+  // Masquée en mode démo plein écran (route /demo ou démo active qui navigue ailleurs).
+  return !route.path.startsWith('/demo') && !demo.actif
 })
 </script>
 

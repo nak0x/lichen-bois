@@ -1,7 +1,8 @@
 <template>
   <GridPaper class="carnet">
     <Crosshairs :cells="[[1, 1], [2, 1], [1, 2]]" />
-    <AppShell label="CARNET" sublabel="spécimens">
+    <div class="carnet__corps">
+      <VerticalLabel class="carnet__vlabel" title="CARNET" subtitle="spécimens" />
       <header class="carnet__entete">
         <h1 class="carnet__titre">Carnet</h1>
         <p class="carnet__sous t-mono">
@@ -61,7 +62,7 @@
           <SpecimenCarte :specimen="s" />
         </li>
       </ul>
-    </AppShell>
+    </div>
 
     <ConfirmationSignal
       v-if="demandeEffacer"
@@ -85,7 +86,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import GridPaper from '@/components/ui/GridPaper.vue'
 import Crosshairs from '@/components/ui/Crosshairs.vue'
-import AppShell from '@/components/ui/AppShell.vue'
+import VerticalLabel from '@/components/ui/VerticalLabel.vue'
 import CellButton from '@/components/ui/CellButton.vue'
 import SpecimenCarte from '@/components/screens/carnet/SpecimenCarte.vue'
 import ConfirmationSignal from '@/components/screens/carnet/ConfirmationSignal.vue'
@@ -153,7 +154,25 @@ async function confirmerEffacer() {
 
 <style scoped>
 .carnet {
-  min-height: 100dvh;
+  min-height: 100%;
+}
+
+.carnet__corps {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.carnet__corps > :not(.carnet__vlabel) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.carnet__vlabel {
+  order: 2;
+  flex: 0 0 auto;
+  margin-left: var(--minor);
+  padding-top: var(--cell);
 }
 
 .carnet__entete {
