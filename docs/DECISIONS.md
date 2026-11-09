@@ -87,3 +87,18 @@ Journal des décisions prises en autonomie pendant la construction (section 3 de
   `locked-actions` ; graine du masque via prop `seed` (silhouette stable par essence).
 - **Test unitaire** `grid.spec.ts` : déterminisme du PRNG et de `stairMask`, bornes des
   cellules, distance de Manhattan.
+
+## Phase 2 — Intégration (agent principal)
+
+- **Agents F, G, H interrompus par une limite de session** avant d'avoir committé leur
+  dernière étape. L'agent principal a mergé les commits existants (F : 3/4, G : 3/4, H : 2/4)
+  puis **récupéré le travail non committé des worktrees** (IdentifierView + EssenceCell pour F,
+  RegistreView pour G, finalisation CarnetView pour H) et **terminé les écrans manquants**
+  (mode démo + barre présentateur + styleguide, non commencés par H). Les messages de commit
+  exacts de la section 10.4 sont conservés.
+- **Barre présentateur du mode démo montée globalement** (`App.vue` → `DemoPresenterBar.vue`)
+  et non dans `DemoView` : la démo navigue vers les vraies routes (`/observer/...`, `/defis/...`),
+  la vue `/demo` se démonte donc aussitôt. Le store `demo` expose `actif` ; `AppShell` masque
+  désormais `BottomNav` quand `demo.actif` (et plus seulement sur le chemin `/demo`). Petites
+  retouches hors périmètre strict (App.vue socle, AppShell d'agent A) assumées par l'orchestrateur
+  au titre de l'intégration inter-périmètres.
