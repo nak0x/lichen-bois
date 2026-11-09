@@ -56,6 +56,13 @@ const rows = computed(() => Math.max(8, registre.length * 6))
 </script>
 
 <style scoped>
+/* La planche fait 12 colonnes (défaut de Plate) + règles ; sur mobile le --cell
+   du socle la ferait déborder. On recalcule un --cell local pour qu'elle tienne
+   dans la largeur, sans scroll horizontal. */
+.registre {
+  --cell: calc((min(100vw, 1280px) - 2 * var(--margin)) / 13);
+}
+
 .registre__contenu {
   display: flex;
   flex-direction: column;

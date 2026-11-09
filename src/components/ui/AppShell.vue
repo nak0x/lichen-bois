@@ -1,15 +1,18 @@
 <template>
   <div class="app-shell">
     <main class="app-shell__main">
-      <div class="app-shell__inner">
-        <slot />
+      <AppHeader v-if="showHeader" />
+      <div class="app-shell__body">
+        <div class="app-shell__inner">
+          <slot />
+        </div>
+        <VerticalLabel
+          v-if="label"
+          class="app-shell__label"
+          :title="label"
+          :subtitle="sublabel"
+        />
       </div>
-      <VerticalLabel
-        v-if="label"
-        class="app-shell__label"
-        :title="label"
-        :subtitle="sublabel"
-      />
     </main>
     <BottomNav v-if="showNav" />
   </div>
@@ -26,6 +29,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDemoStore } from '@/stores/demo'
 import BottomNav from './BottomNav.vue'
+import AppHeader from './AppHeader.vue'
 import VerticalLabel from './VerticalLabel.vue'
 
 const props = withDefaults(
@@ -47,6 +51,11 @@ const showNav = computed(() => {
   // Masquée en mode démo plein écran (route /demo ou démo active qui navigue ailleurs).
   return !route.path.startsWith('/demo') && !demo.actif
 })
+
+// En-tête (boutons Retour / Accueil) : partout sauf l'accueil et le mode démo.
+const showHeader = computed(
+  () => route.path !== '/' && !route.path.startsWith('/demo') && !demo.actif,
+)
 </script>
 
 <style scoped>
@@ -60,11 +69,19 @@ const showNav = computed(() => {
   position: relative;
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   padding-top: var(--safe-top);
   padding-left: calc(var(--margin) + var(--safe-left));
   padding-right: calc(var(--margin) + var(--safe-right));
   /* Dégage la navigation basse (hauteur + safe-area). */
   padding-bottom: calc(72px + var(--safe-bottom));
+}
+
+/* Corps : contenu principal + titre vertical (marge droite). */
+.app-shell__body {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
 }
 
 .app-shell__inner {

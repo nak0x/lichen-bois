@@ -137,3 +137,19 @@ Journal des décisions prises en autonomie pendant la construction (section 3 de
 - Choix : on conserve les espaces ordinaires (et non des espaces insécables) avant la
   ponctuation double, cohérent avec le texte de SPEC.md et avec les assertions e2e
   (« Proposition : Frêne commun »).
+
+## Post-livraison — Navigation et mobile
+
+- **Navigation par boutons** : ajout d'un en-tête `AppHeader` (boutons « ← Retour » et
+  « ⌂ Accueil ») monté par `AppShell` sur toutes les vues sauf l'accueil et le mode démo,
+  en plus de la `BottomNav`. Route `/identifier` (sans paramètre) ajoutée pour que le lien
+  « Identifier » de la nav basse résolve ; la route avec paramètre devient `identifier-specimen`
+  (les liens existants sont basés sur le chemin, donc inchangés).
+- **Scroll horizontal mobile corrigé** :
+  - Accueil : la coupe qui déborde est désormais dans un conteneur `overflow: hidden` et bornée
+    à `min(5·cell, 86vw)` → effet « bleed » conservé, sans scroll (débordait de 68 px).
+  - Registre : la planche (12 colonnes par défaut de `Plate`) débordait de 360 px sur mobile ;
+    `--cell` recalculé localement (/13) pour qu'elle tienne dans la largeur.
+- **Taille des titres sur mobile** : `overflow-wrap: break-word` + `hyphens` sur h1/h2/h3, et
+  sous 400 px, `--fs-display`/`--fs-h1` légèrement réduits. Vérifié : 0 px de débordement
+  horizontal sur les 13 routes à 390 px.

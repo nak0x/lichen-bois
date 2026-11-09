@@ -19,16 +19,19 @@
       <p class="accueil__sous-titre t-mono">Module 01 — Bois</p>
     </header>
 
-    <!-- Grande coupe du frêne, révélée en escalier, qui déborde à droite. -->
+    <!-- Grande coupe du frêne, révélée en escalier, qui déborde à droite.
+         Le conteneur masque le débordement : effet « bleed » sans scroll horizontal. -->
     <div class="accueil__visuel" aria-hidden="true">
-      <GridReveal
-        :cols="REVEAL_COLS"
-        :rows="REVEAL_ROWS"
-        :seed="[0, REVEAL_ROWS - 1]"
-        :mask="masqueEscalier"
-      >
-        <CoupeTransversale type="zone-poreuse" :seed="101" />
-      </GridReveal>
+      <div class="accueil__visuel-inner">
+        <GridReveal
+          :cols="REVEAL_COLS"
+          :rows="REVEAL_ROWS"
+          :seed="[0, REVEAL_ROWS - 1]"
+          :mask="masqueEscalier"
+        >
+          <CoupeTransversale type="zone-poreuse" :seed="101" />
+        </GridReveal>
+      </div>
     </div>
 
     <!-- Ligne de méthode. -->
@@ -146,15 +149,23 @@ async function nouveauSpecimen(): Promise<void> {
   color: var(--ink-2);
 }
 
-/* Grande coupe qui déborde du bord droit. */
+/* Grande coupe qui déborde du bord droit, mais clippée pour éviter le scroll
+   horizontal (overflow hidden). La coupe est mise à l'échelle sur la largeur
+   disponible. */
 .accueil__visuel {
   position: relative;
   z-index: 0;
-  width: calc(5 * var(--cell));
-  /* Déborde du bord droit, comme le rocher de la réf. A. */
-  margin-right: calc(-1.5 * var(--cell));
-  margin-left: auto;
+  width: 100%;
+  overflow: hidden;
   margin-top: calc(-0.5 * var(--cell));
+}
+
+.accueil__visuel-inner {
+  /* Largeur bornée à la colonne : la coupe ne peut pas être plus large que l'écran. */
+  width: min(calc(5 * var(--cell)), 86vw);
+  margin-left: auto;
+  /* Déborde légèrement à droite (réf. A) ; le parent clippe le surplus. */
+  margin-right: calc(-1 * var(--minor));
 }
 
 /* Ligne de méthode. */
