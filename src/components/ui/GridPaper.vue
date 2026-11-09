@@ -22,20 +22,24 @@ withDefaults(
 <style scoped>
 .grid-paper {
   position: relative;
+  /* Couvre toute la page, y compris si le contenu est court (mobile compris). */
+  min-height: 100%;
   background-color: var(--paper);
+  /* Opacité réduite : lignes plus discrètes (alpha abaissé). */
   background-image:
     /* lignes majeures (encre taupe) */
-    linear-gradient(to right, var(--grid-major) var(--line), transparent var(--line)),
-    linear-gradient(to bottom, var(--grid-major) var(--line), transparent var(--line)),
+    linear-gradient(to right, rgba(169, 151, 138, 0.45) var(--line), transparent var(--line)),
+    linear-gradient(to bottom, rgba(169, 151, 138, 0.45) var(--line), transparent var(--line)),
     /* lignes mineures */
-    linear-gradient(to right, var(--grid-minor) var(--line), transparent var(--line)),
-    linear-gradient(to bottom, var(--grid-minor) var(--line), transparent var(--line));
+    linear-gradient(to right, rgba(216, 206, 197, 0.4) var(--line), transparent var(--line)),
+    linear-gradient(to bottom, rgba(216, 206, 197, 0.4) var(--line), transparent var(--line));
   background-size:
     var(--cell) var(--cell),
     var(--cell) var(--cell),
     var(--minor) var(--minor),
     var(--minor) var(--minor);
-  /* La grille est calée sur la marge gauche/haut. */
+  /* La grille est calée sur la marge gauche/haut et se répète sur toute la surface. */
+  background-repeat: repeat;
   background-position:
     var(--margin) 0,
     0 0,
