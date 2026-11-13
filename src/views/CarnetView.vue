@@ -2,66 +2,69 @@
   <GridPaper class="carnet">
     <Crosshairs :cells="[[1, 1], [2, 1], [1, 2]]" />
     <div class="carnet__corps">
-      <VerticalLabel class="carnet__vlabel" title="CARNET" subtitle="spécimens" />
-      <header class="carnet__entete">
-        <h1 class="carnet__titre">Carnet</h1>
-        <p class="carnet__sous t-mono">
-          Tes spécimens : ce que tu as observé, mesuré, identifié et déduit.
-        </p>
-      </header>
+      <div class="carnet__content">
+        <header class="carnet__entete">
+          <h1 class="carnet__titre">Carnet</h1>
+          <p class="carnet__sous t-mono">
+            Tes spécimens : ce que tu as observé, mesuré, identifié et déduit.
+          </p>
+        </header>
 
-      <div class="carnet__actions">
-        <CellButton
-          title="Nouveau spécimen"
-          coord="A1"
-          :cols="2"
-          @click="nouveau"
-        />
-        <CellButton
-          title="Exporter"
-          subtitle="JSON"
-          coord="X1"
-          :cols="2"
-          :disabled="vide"
-          @click="exporter"
-        />
-        <CellButton
-          title="Importer"
-          subtitle="JSON"
-          coord="I1"
-          :cols="2"
-          @click="declencherImport"
-        />
-        <CellButton
-          title="Tout effacer"
-          coord="R"
-          :cols="2"
-          signal
-          :disabled="vide"
-          @click="demandeEffacer = true"
-        />
-        <input
-          ref="champImport"
-          class="visually-hidden"
-          type="file"
-          accept="application/json,.json"
-          @change="onImport"
-        />
+        <div class="carnet__actions">
+          <CellButton
+            title="Nouveau spécimen"
+            coord="A1"
+            :cols="2"
+            @click="nouveau"
+          />
+          <CellButton
+            title="Exporter"
+            subtitle="JSON"
+            coord="X1"
+            :cols="2"
+            :disabled="vide"
+            @click="exporter"
+          />
+          <CellButton
+            title="Importer"
+            subtitle="JSON"
+            coord="I1"
+            :cols="2"
+            @click="declencherImport"
+          />
+          <CellButton
+            title="Tout effacer"
+            coord="R"
+            :cols="2"
+            signal
+            :disabled="vide"
+            @click="demandeEffacer = true"
+          />
+          <input
+            ref="champImport"
+            class="visually-hidden"
+            type="file"
+            accept="application/json,.json"
+            @change="onImport"
+          />
+        </div>
+
+        <p v-if="messageImport" class="carnet__flash t-mono">{{ messageImport }}</p>
+
+        <section v-if="vide" class="carnet__vide">
+          <p class="t-mono">
+            Ton carnet est vide. Crée un spécimen pour commencer à observer.
+          </p>
+        </section>
+
+        <ul v-else class="carnet__liste">
+          <li v-for="s in specimensVisibles" :key="s.id">
+            <SpecimenCarte :specimen="s" />
+          </li>
+        </ul>
       </div>
 
-      <p v-if="messageImport" class="carnet__flash t-mono">{{ messageImport }}</p>
-
-      <section v-if="vide" class="carnet__vide">
-        <p class="t-mono">
-          Ton carnet est vide. Crée un spécimen pour commencer à observer.
-        </p>
-      </section>
-
-      <ul v-else class="carnet__liste">
-        <li v-for="s in specimensVisibles" :key="s.id">
-          <SpecimenCarte :specimen="s" />
-        </li>
-      </ul>
+      <VerticalLabel class="carnet__vlabel" title="CARNET" subtitle="spécimens" />
     </div>
 
     <ConfirmationSignal
@@ -161,15 +164,18 @@ async function confirmerEffacer() {
   position: relative;
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
 }
 
-.carnet__corps > :not(.carnet__vlabel) {
+/* Colonne principale : tous les blocs empilés verticalement. */
+.carnet__content {
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .carnet__vlabel {
-  order: 2;
   flex: 0 0 auto;
   margin-left: var(--minor);
   padding-top: var(--cell);
