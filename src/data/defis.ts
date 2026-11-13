@@ -45,8 +45,8 @@ export const defis: Defi[] = [
       { propriete: 'creux', min: 4, poids: 3, enClair: 'un intérieur qui se vide facilement' },
       { propriete: 'travail', min: 3, poids: 1, enClair: 'se tailler facilement au couteau' },
     ],
-    attendus: ['forsythia'],
-    revelation: 'Les tiges à moelle large, comme celles du forsythia, se vident facilement. Le sureau est l\'autre bois classique des sifflets.',
+    attendus: ['forsythia', 'sureau-noir'],
+    revelation: 'Les tiges à moelle large, comme celles du forsythia ou du sureau, se vident facilement. Le sureau est le bois à sifflets le plus connu — mais ses baies crues sont toxiques, c\'est dans le registre.',
   },
   {
     id: 'tuteurs',

@@ -10,15 +10,24 @@
     </header>
 
     <template v-if="specimen">
-      <!-- Les cinq essences en cellules. -->
-      <section class="identifier__essences">
-        <EssenceCell
-          v-for="r in resultats"
-          :key="r.essence.id"
-          :essence="r.essence"
-          :exclue="!r.compatible"
-          :raison="raisonExclusion(r)"
-        />
+      <!-- Les essences en bande horizontale : candidates d'abord, exclues ensuite.
+           Un défilement horizontal évite une très longue liste verticale. -->
+      <section class="identifier__essences-bloc">
+        <p class="identifier__compte t-label">
+          {{ candidats.length }} possible{{ candidats.length > 1 ? 's' : '' }} ·
+          {{ exclus.length }} écartée{{ exclus.length > 1 ? 's' : '' }} ·
+          glisse pour voir →
+        </p>
+        <div class="identifier__essences" role="list">
+          <EssenceCell
+            v-for="r in resultatsTries"
+            :key="r.essence.id"
+            role="listitem"
+            :essence="r.essence"
+            :exclue="!r.compatible"
+            :raison="raisonExclusion(r)"
+          />
+        </div>
       </section>
 
       <!-- Panel de verdict / proposition / signal. -->
@@ -88,31 +97,40 @@
         </RouterLink>
       </p>
 
-      <!-- Liste des critères, modifiables sur place. -->
+      <!-- Liste des critères, repliés par défaut pour limiter le défilement.
+           Chaque ligne montre la réponse ; on la déplie pour la modifier. -->
       <section class="identifier__criteres">
         <h2 class="identifier__sous-titre">Les critères</h2>
         <div v-for="c in criteres" :key="c.id" class="identifier__critere">
-          <div class="identifier__critere-tete">
-            <span class="identifier__critere-nom t-label">{{ labelCritere(c) }}</span>
-            <span class="identifier__critere-valeur t-mono">{{ valeurLisible(c) }}</span>
-          </div>
-          <ChoiceCells
-            :options="c.options"
-            :label="c.question"
-            :model-value="specimen.answers[c.id]"
-            @update:model-value="(v) => onReponse(c.id, v)"
-          />
           <button
             type="button"
-            class="identifier__pourquoi-btn t-label"
-            :aria-expanded="pourquoiOuvert[c.id] === true"
-            @click="togglePourquoi(c.id)"
+            class="identifier__critere-tete"
+            :aria-expanded="editOuvert[c.id] === true"
+            @click="toggleEdit(c.id)"
           >
-            Pourquoi ce critère ? {{ pourquoiOuvert[c.id] ? '−' : '+' }}
+            <span class="identifier__critere-nom t-label">{{ labelCritere(c) }}</span>
+            <span class="identifier__critere-valeur t-mono">{{ valeurLisible(c) }}</span>
+            <span class="identifier__critere-chevron t-label" aria-hidden="true">{{ editOuvert[c.id] ? '−' : '+' }}</span>
           </button>
-          <p v-if="pourquoiOuvert[c.id]" class="identifier__pourquoi t-mono">
-            {{ c.pourquoi }}
-          </p>
+          <template v-if="editOuvert[c.id]">
+            <ChoiceCells
+              :options="c.options"
+              :label="c.question"
+              :model-value="specimen.answers[c.id]"
+              @update:model-value="(v) => onReponse(c.id, v)"
+            />
+            <button
+              type="button"
+              class="identifier__pourquoi-btn t-label"
+              :aria-expanded="pourquoiOuvert[c.id] === true"
+              @click="togglePourquoi(c.id)"
+            >
+              Pourquoi ce critère ? {{ pourquoiOuvert[c.id] ? '−' : '+' }}
+            </button>
+            <p v-if="pourquoiOuvert[c.id]" class="identifier__pourquoi t-mono">
+              {{ c.pourquoi }}
+            </p>
+          </template>
         </div>
       </section>
     </template>
@@ -182,6 +200,14 @@ const resultats = computed<ResultatCandidat[]>(() => {
 
 const candidats = computed(() => resultats.value.filter((r) => r.compatible).map((r) => r.essence))
 
+// Pour la bande : candidates d'abord (registre en tête), puis exclues.
+const exclus = computed(() => resultats.value.filter((r) => !r.compatible))
+const resultatsTries = computed<ResultatCandidat[]>(() => {
+  const compat = resultats.value.filter((r) => r.compatible)
+  compat.sort((a, b) => Number(b.essence.registre) - Number(a.essence.registre))
+  return [...compat, ...exclus.value]
+})
+
 // Un candidat du registre encore possible déclenche le signal immédiat.
 const candidatRegistre = computed(() => candidats.value.find((e) => e.registre) ?? null)
 
@@ -237,6 +263,12 @@ function togglePourquoi(id: CritereId): void {
   pourquoiOuvert[id] = !pourquoiOuvert[id]
 }
 
+// Dépliage de l'édition d'un critère (replié par défaut → liste compacte).
+const editOuvert = reactive<Partial<Record<CritereId, boolean>>>({})
+function toggleEdit(id: CritereId): void {
+  editOuvert[id] = !editOuvert[id]
+}
+
 async function onReponse(critere: CritereId, valeur: string | undefined): Promise<void> {
   if (!specimen.value) return
   await carnet.mettreAJourAnswers(specimen.value.id, { [critere]: valeur } as Record<CritereId, string>)
@@ -284,12 +316,34 @@ async function confirmer(id: EssenceId): Promise<void> {
   color: var(--ink-2);
 }
 
-/* Cinq essences. */
-.identifier__essences {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--minor);
+/* Essences en bande horizontale : défilement latéral, pas de longue liste verticale. */
+.identifier__essences-bloc {
   margin-bottom: var(--cell);
+}
+
+.identifier__compte {
+  margin: 0 0 calc(var(--minor) / 2);
+  color: var(--ink-2);
+}
+
+.identifier__essences {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--minor);
+  /* Bornée à la colonne : défile en interne sans élargir la page. */
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding-bottom: calc(var(--minor) / 2);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.identifier__essences > * {
+  flex: 0 0 auto;
+  width: calc(3 * var(--cell));
+  scroll-snap-align: start;
 }
 
 .identifier__verdict {
@@ -339,8 +393,7 @@ async function confirmer(id: EssenceId): Promise<void> {
   display: flex;
   flex-direction: column;
   gap: calc(var(--minor) / 2);
-  margin-bottom: var(--cell);
-  padding-bottom: var(--minor);
+  padding-bottom: calc(var(--minor) / 2);
   border-bottom: var(--line) solid var(--grid-major);
 }
 
@@ -349,15 +402,30 @@ async function confirmer(id: EssenceId): Promise<void> {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--minor);
+  width: 100%;
+  min-height: 44px;
+  padding: calc(var(--minor) / 2) 0;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
 }
 
 .identifier__critere-nom {
   color: var(--ink-2);
+  flex: 0 0 auto;
 }
 
 .identifier__critere-valeur {
   color: var(--ink);
   text-align: right;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.identifier__critere-chevron {
+  flex: 0 0 auto;
+  color: var(--ink-3);
 }
 
 .identifier__pourquoi-btn {
@@ -374,8 +442,8 @@ async function confirmer(id: EssenceId): Promise<void> {
 }
 
 @media (min-width: 900px) {
-  .identifier__essences {
-    grid-template-columns: repeat(5, 1fr);
+  .identifier__essences > * {
+    width: calc(2 * var(--cell));
   }
 }
 </style>

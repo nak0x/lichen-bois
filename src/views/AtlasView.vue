@@ -3,13 +3,13 @@
     <header class="atlas__head">
       <h1 class="atlas__titre">Atlas</h1>
       <p class="atlas__intro t-mono">
-        Cinq bois sur la planche. Chaque essence a sa coordonnée. Touche un bloc pour sa fiche.
+        Les bois courants autour d'Annecy. Chaque essence porte sa coordonnée ; touche un bloc pour sa fiche.
       </p>
     </header>
 
     <Plate :cols="cols" :rows="rows">
-      <div class="atlas__grille" :style="grilleStyle">
-        <AtlasBloc v-for="e in essences" :key="e.id" :essence="e" />
+      <div class="atlas__grille">
+        <AtlasBloc v-for="e in essencesTriees" :key="e.id" :essence="e" />
       </div>
     </Plate>
   </div>
@@ -18,23 +18,23 @@
 <script setup lang="ts">
 /**
  * AtlasView (§8.4) — planche à coordonnées.
- * Chaque essence occupe un bloc à sa coordonnée, avec sa coupe, son nom et
- * son résumé. L'if porte une étiquette vermillon « registre ».
+ * Avec l'ajout des essences d'Annecy, les blocs ne sont plus placés à leur
+ * coordonnée exacte (ce serait trop dense) : ils s'écoulent dans une grille
+ * responsive, chaque bloc gardant sa coordonnée en étiquette.
  */
-import type { CSSProperties } from 'vue'
+import { computed } from 'vue'
 import { essences } from '@/data'
 import Plate from '@/components/ui/Plate.vue'
 import AtlasBloc from '@/components/screens/atlas/AtlasBloc.vue'
 
-// Coordonnées utilisées : B2, B5, E2, E5, H3 → colonnes jusqu'à 7, lignes jusqu'à 10.
-const cols = 8
-const rows = 10
+// Planche décorative (règles de coordonnées) ; la grille des blocs est responsive.
+const cols = 6
+const rows = 12
 
-const grilleStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: `repeat(${cols}, var(--cell))`,
-  gridAutoRows: 'var(--cell)',
-}
+// Tri par coordonnée (lettre puis chiffre) pour un ordre de lecture stable.
+const essencesTriees = computed(() =>
+  [...essences].sort((a, b) => a.coordonnee.localeCompare(b.coordonnee, 'fr', { numeric: true })),
+)
 </script>
 
 <style scoped>
@@ -43,11 +43,18 @@ const grilleStyle: CSSProperties = {
    (règles comprises) tienne dans la largeur disponible. Tout (grille, coupes,
    blocs) se met à l'échelle ensemble puisque Plate et AtlasBloc lisent --cell. */
 .atlas {
-  --cell: calc((min(100vw, 1280px) - 2 * var(--margin)) / 9);
+  --cell: calc((min(100vw, 1280px) - 2 * var(--margin)) / 7);
 }
 
 .atlas__head {
   margin-bottom: var(--minor);
+}
+
+/* Grille responsive des blocs : s'écoule et se répartit selon la largeur. */
+.atlas__grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--minor);
 }
 
 .atlas__titre {

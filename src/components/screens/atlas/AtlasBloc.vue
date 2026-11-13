@@ -2,7 +2,6 @@
   <RouterLink
     class="atlas-bloc"
     :to="{ name: 'essence', params: { essenceId: essence.id } }"
-    :style="style"
   >
     <span class="atlas-bloc__coord t-label">{{ essence.coordonnee }}</span>
     <span v-if="essence.registre" class="atlas-bloc__registre t-label">Registre</span>
@@ -20,31 +19,11 @@
  * Positionné sur sa coordonnée, il porte la coupe, le nom et le résumé.
  * L'if (registre) porte une étiquette vermillon « registre ».
  */
-import { computed } from 'vue'
-import type { CSSProperties } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { Essence } from '@/types/content'
 import CoupeTransversale from '@/components/illustrations/CoupeTransversale.vue'
-import { parseCoord } from './coord'
 
-const props = withDefaults(
-  defineProps<{
-    essence: Essence
-    /** Largeur du bloc en cellules. */
-    cols?: number
-    /** Hauteur du bloc en cellules. */
-    rows?: number
-  }>(),
-  { cols: 3, rows: 3 },
-)
-
-const style = computed<CSSProperties>(() => {
-  const { col, row } = parseCoord(props.essence.coordonnee)
-  return {
-    gridColumn: `${col} / span ${props.cols}`,
-    gridRow: `${row} / span ${props.rows}`,
-  }
-})
+defineProps<{ essence: Essence }>()
 </script>
 
 <style scoped>

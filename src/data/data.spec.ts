@@ -41,8 +41,17 @@ describe('Intégrité des données', () => {
   })
 
   describe('Essences', () => {
-    it('contient exactement 5 essences', () => {
-      expect(essences).toHaveLength(5)
+    it('contient les 5 essences d\'origine et au moins une vingtaine en tout', () => {
+      const ids = essences.map((e) => e.id)
+      for (const id of ['frene', 'pin-sylvestre', 'noisetier', 'forsythia', 'if']) {
+        expect(ids).toContain(id)
+      }
+      expect(essences.length).toBeGreaterThanOrEqual(20)
+    })
+
+    it('chaque identifiant d\'essence est unique', () => {
+      const ids = essences.map((e) => e.id)
+      expect(new Set(ids).size).toBe(ids.length)
     })
 
     it('chaque essence couvre les 8 critères', () => {

@@ -153,3 +153,27 @@ Journal des décisions prises en autonomie pendant la construction (section 3 de
 - **Taille des titres sur mobile** : `overflow-wrap: break-word` + `hyphens` sur h1/h2/h3, et
   sous 400 px, `--fs-display`/`--fs-h1` légèrement réduits. Vérifié : 0 px de débordement
   horizontal sur les 13 routes à 390 px.
+
+## Post-livraison — Essences d'Annecy + UX d'identification
+
+- **+20 essences courantes autour d'Annecy** (Haute-Savoie), total 25 : chêne, hêtre, charme,
+  érables sycomore/champêtre, châtaignier, merisier, noyer, tilleul, bouleau, aulne, tremble,
+  saule marsault, robinier, épicéa, sapin pectiné, mélèze, sureau noir, buis, cornouiller sanguin.
+  Données pédagogiques (notes 1–5 = ordres de grandeur) ; `notesFiabilite` sur les bois
+  d'arbuste peu documentés. Les 5 types de coupe existants couvrent toutes les essences.
+- **Critères enrichis** : +5 options d'écorce et +6 options de rameau/feuille pour garder les
+  essences distinguables. Beaucoup d'essences partagent des options → l'identification propose
+  souvent un GROUPE de candidats, cohérent avec « des propositions, jamais des certitudes ».
+- **Registre** : robinier, buis et sureau noir marqués `registre: true` avec une entrée chacun
+  (toxicité non déductible du bois).
+- **Tests du moteur sur fixture canonique** : `src/engine/fixtures.ts` réduit `@/data` aux 5
+  essences d'origine. La logique (section 7.7, matrice 9.2) reste vérifiée exactement malgré
+  l'ajout d'essences. L'intégrité des données (`data.spec`) s'exécute, elle, sur les 25.
+- **Atlas** : avec 25 essences, les blocs ne sont plus placés à leur coordonnée exacte (trop
+  dense, chevauchements) : grille responsive qui s'écoule, chaque bloc gardant sa coordonnée en
+  étiquette. Défilement vertical accepté sur cet écran de savoir.
+- **Identification — moins de défilement vertical** (demande utilisateur) :
+  - la bande des essences candidates défile **horizontalement** (conteneur borné à la colonne,
+    `overflow-x: auto`), candidates d'abord (registre en tête) puis exclues ;
+  - la liste des 8 critères est **repliée par défaut** (ligne = nom + valeur, dépliable pour
+    modifier). La page d'identification passe de ~6000 px à ~1600 px de haut sur mobile.

@@ -19,6 +19,57 @@ export const registre: EntreeRegistre[] = [
     ],
   },
   {
+    id: 'robinier',
+    essenceId: 'robinier',
+    titre: 'Robinier faux-acacia',
+    latin: 'Robinia pseudoacacia',
+    pourquoiIndeductible: 'Son bois est l\'un des plus durables d\'Europe, parfait pour les piquets : rien dans le bois ne dit que le reste de l\'arbre est toxique.',
+    ceQuIlFautSavoir: [
+      'L\'écorce, les feuilles et surtout les graines sont toxiques si on les avale.',
+      'Les jeunes rameaux portent des épines dures.',
+      'Le bois lui-même est sûr à travailler ; le danger vient des autres parties de l\'arbre.',
+    ],
+    gestes: [
+      'Ne mâche ni n\'avale aucune partie de l\'arbre.',
+      'Écarte l\'écorce et les épines avant de tailler ; lave-toi les mains après.',
+      'Pas de gousses ni de graines à portée des plus jeunes.',
+    ],
+  },
+  {
+    id: 'buis',
+    essenceId: 'buis',
+    titre: 'Buis commun',
+    latin: 'Buxus sempervirens',
+    pourquoiIndeductible: 'Ce bois très dur et très fin est idéal pour le tournage et les petites pièces ; son aspect ne révèle en rien sa toxicité.',
+    ceQuIlFautSavoir: [
+      'Feuilles, écorce et bois contiennent des substances toxiques si on les ingère.',
+      'La sciure fine peut irriter les voies respiratoires.',
+      'Évite-le pour un ustensile en contact prolongé avec la nourriture.',
+    ],
+    gestes: [
+      'Masque contre la sciure, et mains lavées après le travail.',
+      'Ne porte pas un copeau à la bouche.',
+      'Réserve-le aux objets qu\'on ne mange pas (jeux, manches, tournage).',
+    ],
+  },
+  {
+    id: 'sureau-noir',
+    essenceId: 'sureau-noir',
+    titre: 'Sureau noir',
+    latin: 'Sambucus nigra',
+    pourquoiIndeductible: 'C\'est le bois à sifflets par excellence, tendre et facile à évider : rien dans la tige ne prévient que les fruits et les parties vertes crus sont toxiques.',
+    ceQuIlFautSavoir: [
+      'Les baies crues, les feuilles et la moelle verte sont toxiques ; cuites, les baies mûres deviennent comestibles.',
+      'La tige sèche, elle, se travaille sans danger pour un sifflet.',
+      'On confond facilement le sureau noir (bon) avec le sureau yèble, herbacé et plus toxique.',
+    ],
+    gestes: [
+      'Ne goûte jamais la moelle ni les baies crues.',
+      'Lave-toi les mains après avoir évidé une tige.',
+      'En cas de doute sur l\'espèce, ne récolte pas les fruits.',
+    ],
+  },
+  {
     id: 'laurier-rose',
     titre: 'Laurier-rose',
     latin: 'Nerium oleander',

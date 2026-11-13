@@ -1,4 +1,10 @@
-export type EssenceId = 'frene' | 'pin-sylvestre' | 'noisetier' | 'forsythia' | 'if'
+export type EssenceId =
+  | 'frene' | 'pin-sylvestre' | 'noisetier' | 'forsythia' | 'if'
+  // Essences courantes autour d'Annecy (Haute-Savoie), ajoutées ensuite.
+  | 'chene-pedoncule' | 'hetre' | 'charme' | 'erable-sycomore' | 'erable-champetre'
+  | 'chataignier' | 'merisier' | 'noyer' | 'tilleul' | 'bouleau'
+  | 'aulne-glutineux' | 'tremble' | 'saule-marsault' | 'robinier' | 'epicea'
+  | 'sapin-pectine' | 'meleze' | 'sureau-noir' | 'buis' | 'cornouiller-sanguin'
 export type CritereId = 'resine' | 'masse' | 'coupe' | 'moelle' | 'couleur' | 'ongle' | 'ecorce' | 'rameau'
 export type ProprieteId =
   | 'tenacite' | 'elasticite' | 'durete' | 'fendabilite' | 'allumage'

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { evaluer } from './defis'
-import { essences as essencesFixtures, defis as defisFixtures } from '@/data'
+import { essencesFixtures, defisFixtures } from './fixtures'
 import type { Essence, Defi } from '@/types/content'
 
 // ─── Utilitaires ──────────────────────────────────────────────────────────────
