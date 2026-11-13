@@ -3,13 +3,13 @@
     <header class="atlas__head">
       <h1 class="atlas__titre">Atlas</h1>
       <p class="atlas__intro t-mono">
-        Les bois courants autour d'Annecy. Chaque essence porte sa coordonnée ; touche un bloc pour sa fiche.
+        Les bois courants autour d'Annecy. Glisse horizontalement ; touche un bloc pour sa fiche.
       </p>
     </header>
 
     <Plate :cols="cols" :rows="rows">
-      <div class="atlas__grille">
-        <AtlasBloc v-for="e in essencesTriees" :key="e.id" :essence="e" />
+      <div class="atlas__grille" role="list">
+        <AtlasBloc v-for="e in essencesTriees" :key="e.id" role="listitem" :essence="e" />
       </div>
     </Plate>
   </div>
@@ -27,9 +27,9 @@ import { essences } from '@/data'
 import Plate from '@/components/ui/Plate.vue'
 import AtlasBloc from '@/components/screens/atlas/AtlasBloc.vue'
 
-// Planche décorative (règles de coordonnées) ; la grille des blocs est responsive.
+// Planche décorative (règles de coordonnées) ; la grille des blocs défile à l'horizontale.
 const cols = 6
-const rows = 12
+const rows = 4
 
 // Tri par coordonnée (lettre puis chiffre) pour un ordre de lecture stable.
 const essencesTriees = computed(() =>
@@ -50,11 +50,32 @@ const essencesTriees = computed(() =>
   margin-bottom: var(--minor);
 }
 
-/* Grille responsive des blocs : s'écoule et se répartit selon la largeur. */
+/* Grille à défilement horizontal : les blocs se rangent en 2 rangées et on
+   glisse latéralement, pour limiter le défilement vertical sur mobile. */
 .atlas__grille {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, 1fr);
+  grid-auto-columns: calc(3 * var(--cell));
   gap: var(--minor);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding-bottom: calc(var(--minor) / 2);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.atlas__grille > * {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 900px) {
+  /* Plus de hauteur disponible : trois rangées. */
+  .atlas__grille {
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-columns: calc(2 * var(--cell));
+  }
 }
 
 .atlas__titre {
